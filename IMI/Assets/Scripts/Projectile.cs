@@ -3,7 +3,9 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public Transform target;
-    public float speed = 5f;
+    public float speed = 10f;
+    public int damage;
+    public BattleManager battleManager;
 
     void Update()
     {
@@ -15,6 +17,7 @@ public class Projectile : MonoBehaviour
             speed * Time.deltaTime
         );
 
+        // When it reaches target
         if (Vector3.Distance(transform.position, target.position) < 0.1f)
         {
             HitTarget();
@@ -23,9 +26,22 @@ public class Projectile : MonoBehaviour
 
     void HitTarget()
     {
-        Debug.Log("Hit!");
+        Unit unit = target.GetComponent<Unit>();
 
-        //will add hit effects here later
+        if (unit != null)
+        {
+            unit.TakeDamage(damage);
+
+            if (unit.IsDead())
+            {
+                battleManager.battleLog.Log(unit.unitName + "Enemy was defeated!");
+                battleManager.EndBattle();
+            }
+            else
+            {
+                battleManager.StartCoroutine(battleManager.DelayedEnemyTurn());
+            }
+        }
 
         Destroy(gameObject);
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class BattleManager : MonoBehaviour
 {
@@ -7,11 +8,30 @@ public class BattleManager : MonoBehaviour
     public Unit enemy;
     public GameObject fireballPrefab;
     public Transform playerFirePoint;
-
+    private bool battleOver = false;
     private bool playerTurn = true;
+    public float turnDelay = 1.0f;
+    public BattleLog battleLog;
+    public SpellSlot[] spellSlots;
+
+
+void Start()
+    {
+        for (int i = 0; i < spellSlots.Length; i++)
+        {
+            Spell spell = player.GetSpell(i);
+
+            if (spell != null)
+            {
+                spellSlots[i].Setup(spell, (i + 1).ToString());
+            }
+        }
+    }
 
     void Update()
     {
+        if (battleOver) return;
+
         if (playerTurn)
         {
             HandlePlayerInput();
@@ -29,48 +49,92 @@ public class BattleManager : MonoBehaviour
         {
             UseSpell(1);
         }
+        else if (Keyboard.current.digit3Key.wasPressedThisFrame)
+        {
+            UseSpell(2);
+        }
+        else if (Keyboard.current.digit4Key.wasPressedThisFrame)
+        {
+            UseSpell(3);
+        }
     }
 
     void UseSpell(int index)
-{
-    Spell spell = player.GetSpell(index);
-
-    Debug.Log("Player used " + spell.spellName);
-
-    SpawnFireball();
-
-    enemy.TakeDamage(spell.damage);
-
-    if (enemy.IsDead())
     {
-        Debug.Log("Enemy defeated!");
-        return;
+        SpellSlot slot = spellSlots[index];
+
+        // Block if on cooldown
+        if (!slot.IsReady())
+        {
+            battleLog.LogSystem("Spell is on cooldown!");
+            return;
+        }
+
+        Spell spell = slot.GetSpell();
+
+        HighlightSlot(index);
+
+        battleLog.LogPlayer("Player used " + spell.spellName + " (" + spell.damage + " dmg)");
+
+        SpawnFireball(spell.damage);
+
+        slot.TriggerCooldown();
+
+        playerTurn = false;
     }
 
-    playerTurn = false;
-    Invoke(nameof(EnemyTurn), 1.0f);
-}
-
-    void EnemyTurn()
+    public void EnemyTurn()
     {
-        Debug.Log("Enemy attacks!");
+        if (battleOver) return;
+
+        battleLog.LogEnemy("Enemy attacks (" + enemy.attack + " dmg)");
 
         player.TakeDamage(enemy.attack);
 
         if (player.IsDead())
         {
-            Debug.Log("Player defeated!");
+            battleLog.LogSystem("Player defeated!");
+            battleOver = true;
             return;
         }
 
+        // Reduce cooldowns at end of enemy turn
+        foreach (var slot in spellSlots)
+        {
+            slot.ReduceCooldown();
+        }
         playerTurn = true;
     }
 
-    void SpawnFireball()
+    void SpawnFireball(int damage)
     {
         GameObject fb = Instantiate(fireballPrefab, playerFirePoint.position, Quaternion.identity);
 
         Projectile proj = fb.GetComponent<Projectile>();
         proj.target = enemy.transform;
+        proj.damage = damage;
+        proj.battleManager = this;
+    }
+
+    public void EndBattle()
+    {
+        battleOver = true;
+    }
+
+    public IEnumerator DelayedEnemyTurn()
+    {
+        yield return new WaitForSeconds(turnDelay);
+
+        EnemyTurn();
+    }
+
+    public void HighlightSlot(int index)
+    {
+        for (int i = 0; i < spellSlots.Length; i++)
+        {
+            spellSlots[i].transform.localScale = (i == index) 
+                ? Vector3.one * 1.2f 
+                : Vector3.one;
+        }
     }
 }
