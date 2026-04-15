@@ -23,7 +23,7 @@ void Start()
 
             if (spell != null)
             {
-                spellSlots[i].Setup(spell, (i + 1).ToString());
+                spellSlots[i].Setup(spell);
             }
         }
     }
@@ -132,9 +132,7 @@ void Start()
     {
         for (int i = 0; i < spellSlots.Length; i++)
         {
-            spellSlots[i].transform.localScale = (i == index) 
-                ? Vector3.one * 1.2f 
-                : Vector3.one;
+            spellSlots[i].SetHighlighted(i == index);
         }
     }
 }

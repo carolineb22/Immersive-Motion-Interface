@@ -10,12 +10,13 @@ public class SpellSlot : MonoBehaviour
 
     private Spell spell;
     private int currentCooldown = 0;
+    public Image highlightBorder;
 
-    public void Setup(Spell newSpell, string key)
+    public void Setup(Spell newSpell)
     {
         spell = newSpell;
         icon.sprite = spell.icon;
-        keyText.text = key;
+        keyText.text = spell.spellName;
 
         UpdateUI();
     }
@@ -45,6 +46,14 @@ public class SpellSlot : MonoBehaviour
         }
     }
 
+    public void SetHighlighted(bool isHighlighted)
+{
+    if (highlightBorder != null)
+    {
+        highlightBorder.enabled = isHighlighted;
+    }
+}
+
      public void UpdateUI()
     {
         float percent = spell.cooldownTurns > 0 
@@ -54,9 +63,5 @@ public class SpellSlot : MonoBehaviour
         cooldownOverlay.fillAmount = percent;
 
         icon.color = IsReady() ? Color.white : Color.gray;
-
-        // Show cooldown number
-        if (currentCooldown > 0)
-            keyText.text = currentCooldown.ToString();
     }
 }

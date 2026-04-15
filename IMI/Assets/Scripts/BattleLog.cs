@@ -20,16 +20,19 @@ public class BattleLog : MonoBehaviour
 
     public void LogPlayer(string message)
     {
-        Log("<color=green>" + message + "</color>");
+        Log("<color=#7CFC8A>" + message + "</color>");
+        Debug.Log($"'{message}'");
     }
 
     public void LogEnemy(string message)
     {
-        Log("<color=red>" + message + "</color>");
+        Log("<color=#FF6B6B>" + message + "</color>");
+        Debug.Log($"'{message}'");
     }
 
     public void LogSystem(string message)
     {
         Log("<color=yellow>" + message + "</color>");
+        Debug.Log($"'{message}'");
     }
 }
