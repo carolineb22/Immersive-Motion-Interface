@@ -10,4 +10,5 @@ public class LevelData
     public Sprite backgroundSprite;
     public int enemyHP;
     public int enemyAttack;
+    public AudioClip battleMusic;
 }
