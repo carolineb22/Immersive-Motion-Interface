@@ -26,6 +26,7 @@ public class BattleManager : MonoBehaviour
 
         enemy.GetComponent<SpriteRenderer>().sprite = data.enemySprite;
 
+        int index = GameData.currentLevelIndex;
 
         for (int i = 0; i < spellSlots.Length; i++)
         {

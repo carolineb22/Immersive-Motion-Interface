@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MapCameraController : MonoBehaviour
 {
@@ -30,8 +31,18 @@ public class MapCameraController : MonoBehaviour
         }
 
         // normal movement
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float h = 0f;
+        float v = 0f;
+
+        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            h = -1f;
+        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            h = 1f;
+
+        if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
+            v = -1f;
+        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
+            v = 1f;
 
         Vector3 move = new Vector3(h, v, 0) * moveSpeed * Time.deltaTime;
         transform.position += move;
@@ -45,7 +56,10 @@ public class MapCameraController : MonoBehaviour
 
     public void FocusOn(Vector3 target)
     {
-        targetPosition = new Vector3(target.x, target.y, transform.position.z);
+        float clampedX = Mathf.Clamp(target.x, minBounds.x, maxBounds.x);
+        float clampedY = Mathf.Clamp(target.y, minBounds.y, maxBounds.y);
+
+        targetPosition = new Vector3(clampedX, clampedY, transform.position.z);
         isFocusing = true;
     }
 }
