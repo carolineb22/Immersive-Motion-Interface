@@ -1258,7 +1258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelNode
   levelIndex: 2
   levelData:
-    levelName: Cave monster
+    levelName: 
     enemyType: 0
     enemySprite: {fileID: -4928284627056355153, guid: 06305bc47d6049b4e986e6bb44051fad, type: 3}
     backgroundSprite: {fileID: 5664316814509215426, guid: b08136f4a74438449ba97dd3422434a0, type: 3}

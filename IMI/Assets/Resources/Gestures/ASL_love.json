@@ -1,0 +1,74 @@
+{
+    "timeThreshold": 1000.0,
+    "leftHanded": true,
+    "twoHanded": false,
+    "ambidextrous": false,
+    "primary": {
+        "name": "ASL_love",
+        "wristDirAgnostic": true,
+        "fingerDirs": [
+            {
+                "targetFinger": 0,
+                "targetDirection": {
+                    "x": -0.7071067690849304,
+                    "y": 0.7071067690849304,
+                    "z": 0.0
+                },
+                "angleThreshold": 25.0,
+                "weight": 1.100000023841858,
+                "curled": false
+            },
+            {
+                "targetFinger": 1,
+                "targetDirection": {
+                    "x": 0.0,
+                    "y": 1.0,
+                    "z": 0.0
+                },
+                "angleThreshold": 45.0,
+                "weight": 1.100000023841858,
+                "curled": false
+            },
+            {
+                "targetFinger": 2,
+                "targetDirection": {
+                    "x": 0.0,
+                    "y": -1.0,
+                    "z": 0.0
+                },
+                "angleThreshold": 360.0,
+                "weight": 1.0,
+                "curled": true
+            },
+            {
+                "targetFinger": 3,
+                "targetDirection": {
+                    "x": 0.0,
+                    "y": -1.0,
+                    "z": 0.0
+                },
+                "angleThreshold": 360.0,
+                "weight": 1.0,
+                "curled": true
+            },
+            {
+                "targetFinger": 4,
+                "targetDirection": {
+                    "x": 0.0,
+                    "y": 1.0,
+                    "z": 0.0
+                },
+                "angleThreshold": 45.0,
+                "weight": 1.100000023841858,
+                "curled": false
+            }
+        ],
+        "scoreThreshold": 5.0
+    },
+    "secondary": {
+        "name": "",
+        "wristDirAgnostic": false,
+        "fingerDirs": [],
+        "scoreThreshold": 0.0
+    }
+}
