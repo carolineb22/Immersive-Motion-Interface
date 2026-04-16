@@ -1257,11 +1257,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelNode
   levelIndex: 2
   levelData:
-    levelName: Cave monster
+    levelName: 
     enemyType: 0
-    enemySprite: {fileID: -4928284627056355153, guid: 06305bc47d6049b4e986e6bb44051fad, type: 3}
-    enemyHP: 100
-    enemyAttack: 30
+    enemySprite: {fileID: 0}
+    enemyHP: 0
+    enemyAttack: 0
   isHomeBase: 0
   mist: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}

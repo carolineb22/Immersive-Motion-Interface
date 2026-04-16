@@ -9,9 +9,51 @@ public class LevelSelectManager : MonoBehaviour
 
     private LevelNode currentNode;
     private int currentIndex = 0;
+    private bool hasShown = false;
 
     void Start()
     {
+        var gesture = HandManager.Instance;
+        gesture.webcamFeed.RestartWebcam();
+
+        HandManager.onGestureComplete.AddListener((gesture) =>
+        {
+            if (gesture == "fingergun_up")
+            {
+                MoveSelection(Vector2.up);
+
+            }
+            else if (gesture == "fingergun_right")
+            {
+                MoveSelection(Vector2.right);
+
+            }
+            else if (gesture == "fingergun_down")
+            {
+                MoveSelection(Vector2.down);
+
+            }
+            else if (gesture == "thumbs_down")
+            {
+                MoveSelection(Vector2.left);
+
+            }
+            else if (gesture == "closed_fist")
+            {
+                if (currentNode != null)
+                {
+                    
+                    currentNode.ConfirmStart();
+                }
+                else
+                {
+
+                    levelNodes[currentIndex].OnSelected();
+
+                }
+            }
+        });
+
         // Lock/unlock nodes
         for (int i = 0; i < levelNodes.Length; i++)
         {
@@ -118,6 +160,8 @@ public class LevelSelectManager : MonoBehaviour
 
     public void ShowStartPrompt(LevelNode node)
     {
+        if (hasShown) return;
+        hasShown = true;
         currentNode = node;
         startPrompt.SetActive(true);
     }

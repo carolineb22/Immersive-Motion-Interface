@@ -17,6 +17,9 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
+       
+
+
         if (GameData.currentLevel == null)
         {
             Debug.LogError("GameData.currentLevel is NULL!");
@@ -61,6 +64,33 @@ public class BattleManager : MonoBehaviour
                 spellSlots[i].Setup(spell);
             }
         }
+
+        var gesture = HandManager.Instance;
+        gesture.webcamFeed.RestartWebcam();
+
+        HandManager.onGestureComplete.AddListener((gesture) =>
+        {
+            if (!playerTurn || battleOver) return;
+
+            if (gesture == "peace_sign")
+            {
+                UseSpell(0);
+            }
+            else if (gesture == "L_sign")
+            {
+                UseSpell(1);
+            }
+            else if (gesture == "thumbs_up")
+            {
+                UseSpell(2);
+            }
+            else if (gesture == "ASL_love")
+            {
+                UseSpell(3);
+            }
+            
+            
+        });
     }
 
     void Update()
@@ -69,7 +99,7 @@ public class BattleManager : MonoBehaviour
 
         if (playerTurn)
         {
-            HandlePlayerInput();
+            //HandlePlayerInput();
         }
     }
 
