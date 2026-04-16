@@ -32,7 +32,7 @@ public class WebcamFeed
 
 
 
-        webcamTexture = new WebCamTexture();
+        webcamTexture = new WebCamTexture(640, 360);
         webcamSnippetTexture = new Texture2D(640, 360);
         webcamTexture.Play();
 

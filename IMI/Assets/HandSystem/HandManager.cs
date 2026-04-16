@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -82,7 +83,7 @@ public class HandManager : MonoBehaviour
 
         CreateHiddenUI();
         webcamFeed = new WebcamFeed(WebcamTexture, WebcamSnippet);
-        Debug.Log("webcam made" + webcamFeed.IsActive());
+        UnityEngine.Debug.Log("webcam made" + webcamFeed.IsActive());
 
 
         Resources.LoadAll<TextAsset>("Gestures").ToList<TextAsset>().ForEach(rawJson => { 
@@ -186,7 +187,7 @@ public class HandManager : MonoBehaviour
                     if (gestureInfo == null)
                     {
                         trackedInfo.Add(new GestureInfo(gesture.primary.name));
-                        Debug.Log($"Ticked gesture {gesture.primary.name} as active for left hand.");
+                        UnityEngine.Debug.Log($"Ticked gesture {gesture.primary.name} as active for left hand.");
 
 
                     }
@@ -213,7 +214,7 @@ public class HandManager : MonoBehaviour
                     if (gestureInfo == null)
                     {
                         trackedInfo.Add(new GestureInfo(gesture.primary.name));
-                        Debug.Log($"Ticked gesture {gesture.primary.name} as active for right.");
+                        UnityEngine.Debug.Log($"Ticked gesture {gesture.primary.name} as active for right.");
                     }
                     else
                     {
@@ -247,7 +248,7 @@ public class HandManager : MonoBehaviour
         {
             if (info.timeout <= 0f)
             {
-                Debug.Log($"Gesture {info.name} timed out after {info.millisActive} milliseconds.");
+                UnityEngine.Debug.Log($"Gesture {info.name} timed out after {info.millisActive} milliseconds.");
                 info.Reset();
                 return;
             }
@@ -256,7 +257,7 @@ public class HandManager : MonoBehaviour
             if (gesture != null && info.millisActive >= gesture.timeThreshold)
             {
                 // Trigger input event here, using info.name to identify the gesture
-                Debug.Log($"Gesture {info.name} completed after {info.millisActive} milliseconds!");
+                UnityEngine.Debug.Log($"Gesture {info.name} completed after {info.millisActive} milliseconds!");
 
                 onGestureComplete.Invoke(info.name);
 
