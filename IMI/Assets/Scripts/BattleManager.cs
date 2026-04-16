@@ -15,8 +15,18 @@ public class BattleManager : MonoBehaviour
     public SpellSlot[] spellSlots;
 
 
-void Start()
+    void Start()
     {
+        LevelData data = GameData.currentLevel;
+
+        enemy.maxHP = data.enemyHP;
+        enemy.currentHP = data.enemyHP;
+        enemy.attack = data.enemyAttack;
+        enemy.element = data.enemyType;
+
+        enemy.GetComponent<SpriteRenderer>().sprite = data.enemySprite;
+
+
         for (int i = 0; i < spellSlots.Length; i++)
         {
             Spell spell = player.GetSpell(i);
@@ -71,11 +81,17 @@ void Start()
         }
 
         Spell spell = slot.GetSpell();
+        
+        // calculate elemental damage
+        float multiplier = ElementSystem.GetMultiplier(spell.element, enemy.element);
+        int finalDamage = Mathf.RoundToInt(spell.damage * multiplier);
 
         HighlightSlot(index);
 
-        battleLog.LogPlayer("Player used " + spell.spellName + " (" + spell.damage + " dmg)");
+        // Log updated damage
+        battleLog.LogPlayer($"Player used {spell.spellName} ({finalDamage} dmg)");
 
+        // Pass modified damage
         SpawnFireball(spell.damage);
 
         slot.TriggerCooldown();
@@ -134,5 +150,19 @@ void Start()
         {
             spellSlots[i].SetHighlighted(i == index);
         }
+    }
+
+    public void OnEnemyDefeated()
+    {
+        if (battleOver) return;
+
+        battleLog.LogSystem("Enemy defeated!");
+
+        GameData.unlockedLevel = Mathf.Max(
+            GameData.unlockedLevel,
+            GameData.currentLevelIndex + 1
+        );
+
+        EndBattle();
     }
 }

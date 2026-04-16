@@ -34,8 +34,8 @@ public class Projectile : MonoBehaviour
 
             if (unit.IsDead())
             {
-                battleManager.battleLog.Log(unit.unitName + "Enemy was defeated!");
-                battleManager.EndBattle();
+                battleManager.battleLog.Log(unit.unitName + " Enemy was defeated!");
+                battleManager.OnEnemyDefeated();
             }
             else
             {

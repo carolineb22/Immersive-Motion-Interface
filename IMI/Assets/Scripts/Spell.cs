@@ -6,4 +6,5 @@ public class Spell
     public int damage;
     public Sprite icon;
     public int cooldownTurns;
+    public ElementType element;
 }

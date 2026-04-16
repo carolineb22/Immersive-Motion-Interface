@@ -154,23 +154,28 @@ MonoBehaviour:
   currentHP: 0
   attack: 20
   hpBar: {fileID: 1101676802}
+  element: 0
   spells:
   - spellName: fireball
     damage: 20
     icon: {fileID: -1707750344848743446, guid: c4359693a6ce7c44fb0ad0d6d5e79b94, type: 3}
     cooldownTurns: 3
+    element: 0
   - spellName: Ice blast
     damage: 5
     icon: {fileID: 8379756352964005205, guid: ff0e7143e5fba994aa7400abff824910, type: 3}
     cooldownTurns: 1
+    element: 1
   - spellName: Earthquake
-    damage: 20
+    damage: 24
     icon: {fileID: 7410168535579807221, guid: 1267f4e026776d6428d08ad404976dad, type: 3}
     cooldownTurns: 3
+    element: 2
   - spellName: Watergun
     damage: 20
     icon: {fileID: 4959926743174267188, guid: f7f242138a23bb049b26dadeabb1e7e7, type: 3}
     cooldownTurns: 2
+    element: 1
 --- !u!212 &10095698
 SpriteRenderer:
   serializedVersion: 2
@@ -356,6 +361,7 @@ MonoBehaviour:
   currentHP: 0
   attack: 20
   hpBar: {fileID: 754777527}
+  element: 3
 --- !u!212 &92797752
 SpriteRenderer:
   serializedVersion: 2
@@ -1624,7 +1630,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -22.700012, y: 0}
+  m_AnchoredPosition: {x: -22.700073, y: 0}
   m_SizeDelta: {x: 431.2, y: 400}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1232345502
@@ -1801,7 +1807,7 @@ Transform:
   m_GameObject: {fileID: 1476464047}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.08, y: -0.07, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []

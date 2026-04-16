@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
     public int attack = 15;
 
     public HPBar hpBar; 
+    public ElementType element;
 
     void Start()
     {
