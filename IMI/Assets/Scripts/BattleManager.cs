@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class BattleManager : MonoBehaviour
@@ -13,13 +14,12 @@ public class BattleManager : MonoBehaviour
     public float turnDelay = 1.0f;
     public BattleLog battleLog;
     public SpellSlot[] spellSlots;
+    public AudioSource musicSource;
 
 
     void Start()
     {
        
-
-
         if (GameData.currentLevel == null)
         {
             Debug.LogError("GameData.currentLevel is NULL!");
@@ -43,7 +43,16 @@ public class BattleManager : MonoBehaviour
             Debug.LogError("BattleLog is NOT assigned!");
             return;
         }
+
+        
         LevelData data = GameData.currentLevel;
+
+        if (data.battleMusic != null && musicSource != null)
+        {
+            musicSource.clip = data.battleMusic;
+            musicSource.loop = true;
+            musicSource.Play();
+        }
 
         Debug.Log("enemy = " + enemy);
         enemy.maxHP = data.enemyHP;
@@ -183,6 +192,7 @@ public class BattleManager : MonoBehaviour
         {
             battleLog.LogSystem("Player defeated!");
             battleOver = true;
+            StartCoroutine(ReturnToLevelSelect());
             return;
         }
 
@@ -212,6 +222,7 @@ public class BattleManager : MonoBehaviour
     public void EndBattle()
     {
         battleOver = true;
+        StartCoroutine(ReturnToLevelSelect());
     }
 
     public IEnumerator DelayedEnemyTurn()
@@ -241,5 +252,12 @@ public class BattleManager : MonoBehaviour
         );
 
         EndBattle();
+    }
+
+    IEnumerator ReturnToLevelSelect()
+    {
+        yield return new WaitForSeconds(2f); // gives time to read "Enemy defeated!"
+
+        SceneManager.LoadScene("LevelSelect");
     }
 }
