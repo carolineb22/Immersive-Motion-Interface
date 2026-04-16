@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class LevelNode : MonoBehaviour
 {
     public int levelIndex;
+    public LevelData levelData;
     public bool isHomeBase = false;
     public GameObject mist;
 
@@ -12,7 +13,7 @@ public class LevelNode : MonoBehaviour
 
     private SpriteRenderer sr;
 
-    public Color normalColor = Color.black;
+    public Color normalColor = Color.white;
     public Color selectedColor = Color.cyan;
     public Color lockedColor = Color.gray;
 
@@ -80,6 +81,21 @@ public class LevelNode : MonoBehaviour
 
     public void ConfirmStart()
     {
+        if (isHomeBase)
+        {
+            Debug.Log("Cannot start battle at home base!");
+            return;
+        }
+
+        if (levelData == null)
+        {
+            Debug.LogError("LevelData is NOT assigned on node " + levelIndex);
+            return;
+        }
+
+        GameData.currentLevel = levelData;
+        GameData.currentLevelIndex = levelIndex;
+
         SceneManager.LoadScene("BattleScene");
     }
 }

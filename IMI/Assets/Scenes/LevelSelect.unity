@@ -471,12 +471,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSelectManager
   startPrompt: {fileID: 168520185}
+  homeBasePanel: {fileID: 520473504}
   levelNodes:
   - {fileID: 1615224158}
   - {fileID: 446364877}
   - {fileID: 1192277716}
   - {fileID: 1223757949}
-  homeBasePanel: {fileID: 520473504}
 --- !u!1 &446364873
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,7 +629,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelNode
   levelIndex: 1
+  levelData:
+    levelName: Forest Monster
+    enemyType: 0
+    enemySprite: {fileID: -1793594936228583289, guid: 5e05e316ad5f10946beb230230c09bfe, type: 3}
+    enemyHP: 100
+    enemyAttack: 15
   isHomeBase: 0
+  mist: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 0, g: 1, b: 1, a: 1}
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &452523518
 GameObject:
   m_ObjectHideFlags: 0
@@ -892,7 +902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &520473505
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1246,7 +1256,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelNode
   levelIndex: 2
+  levelData:
+    levelName: 
+    enemyType: 0
+    enemySprite: {fileID: 0}
+    enemyHP: 0
+    enemyAttack: 0
   isHomeBase: 0
+  mist: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 0, g: 1, b: 1, a: 1}
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &1223757945
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,7 +1419,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelNode
   levelIndex: 3
+  levelData:
+    levelName: 
+    enemyType: 0
+    enemySprite: {fileID: 0}
+    enemyHP: 0
+    enemyAttack: 0
   isHomeBase: 0
+  mist: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 0, g: 1, b: 1, a: 1}
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &1397230813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1689,7 +1719,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelNode
   levelIndex: 0
+  levelData:
+    levelName: 
+    enemyType: 0
+    enemySprite: {fileID: 0}
+    enemyHP: 0
+    enemyAttack: 0
   isHomeBase: 1
+  mist: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 0, g: 1, b: 1, a: 1}
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &1837546453
 GameObject:
   m_ObjectHideFlags: 0

@@ -134,7 +134,12 @@ public class LevelSelectManager : MonoBehaviour
 
         // Unlock next level
         GameData.unlockedLevel = Mathf.Max(GameData.unlockedLevel, 1);
-
+        
+        for (int i = 0; i < levelNodes.Length; i++)
+        {
+            bool unlocked = i <= GameData.unlockedLevel;
+            levelNodes[i].SetLocked(!unlocked);
+        }
         currentNode = null;
     }
 }

@@ -356,9 +356,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30fbefccc9e28a408b0d2ef1553c1b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  unitName: 
+  unitName: Tree Monster
   maxHP: 100
-  currentHP: 0
+  currentHP: 100
   attack: 20
   hpBar: {fileID: 754777527}
   element: 3
@@ -409,7 +409,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1793594936228583289, guid: 5e05e316ad5f10946beb230230c09bfe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -870,14 +870,14 @@ RectTransform:
   m_GameObject: {fileID: 441751840}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.93, y: 1, z: 0.91}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 754777526}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &441751842
@@ -1880,7 +1880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   player: {fileID: 10095697}
   enemy: {fileID: 92797751}
-  fireballPrefab: {fileID: 8873835818043895548, guid: e3163df16f9907844a146ee5f696703b, type: 3}
+  fireballPrefab: {fileID: 3308746778121192563, guid: 2d522264337fc2d42aa57a5b79b14d0f, type: 3}
   playerFirePoint: {fileID: 536153163}
   turnDelay: 1
   battleLog: {fileID: 1232345502}

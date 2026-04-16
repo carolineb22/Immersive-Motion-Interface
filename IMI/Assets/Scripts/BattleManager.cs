@@ -17,8 +17,32 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
+        if (GameData.currentLevel == null)
+        {
+            Debug.LogError("GameData.currentLevel is NULL!");
+            return;
+        }
+
+        if (enemy == null)
+        {
+            Debug.LogError("Enemy is NOT assigned!");
+            return;
+        }
+
+        if (player == null)
+        {
+            Debug.LogError("Player is NOT assigned!");
+            return;
+        }
+
+        if (battleLog == null)
+        {
+            Debug.LogError("BattleLog is NOT assigned!");
+            return;
+        }
         LevelData data = GameData.currentLevel;
 
+        Debug.Log("enemy = " + enemy);
         enemy.maxHP = data.enemyHP;
         enemy.currentHP = data.enemyHP;
         enemy.attack = data.enemyAttack;
@@ -72,6 +96,11 @@ public class BattleManager : MonoBehaviour
 
     void UseSpell(int index)
     {
+        if (spellSlots == null || index >= spellSlots.Length)
+        {
+            Debug.LogError("Invalid spellSlots!");
+            return;
+        }
         SpellSlot slot = spellSlots[index];
 
         // Block if on cooldown
@@ -81,7 +110,19 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        if (slot == null)
+        {
+            Debug.LogError("SpellSlot is NULL at index " + index);
+            return;
+        }
+
         Spell spell = slot.GetSpell();
+
+         if (spell == null)
+        {
+            Debug.LogError("Spell is NULL in slot " + index);
+            return;
+        }
         
         // calculate elemental damage
         float multiplier = ElementSystem.GetMultiplier(spell.element, enemy.element);
@@ -125,6 +166,11 @@ public class BattleManager : MonoBehaviour
 
     void SpawnFireball(int damage)
     {
+        if (fireballPrefab == null || playerFirePoint == null)
+        {
+            Debug.LogError("Fireball prefab or fire point not assigned!");
+            return;
+        }
         GameObject fb = Instantiate(fireballPrefab, playerFirePoint.position, Quaternion.identity);
 
         Projectile proj = fb.GetComponent<Projectile>();
