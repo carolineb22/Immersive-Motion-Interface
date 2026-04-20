@@ -3,23 +3,44 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+/// <summary>
+/// Controls the flow of a turn-based battle:
+/// - Handles player and enemy turns
+/// - Manages spells, cooldowns, and damage
+/// - Spawns projectiles
+/// - Plays battle music
+/// - Ends battle and returns to level select
+/// </summary>
 public class BattleManager : MonoBehaviour
 {
-    public PlayerUnit player;
-    public Unit enemy;
-    public GameObject fireballPrefab;
-    public Transform playerFirePoint;
-    private bool battleOver = false;
-    private bool playerTurn = true;
-    public float turnDelay = 1.0f;
-    public BattleLog battleLog;
-    public SpellSlot[] spellSlots;
-    public AudioSource musicSource;
+    [Header("Units")]
+    public PlayerUnit player;        // Reference to the player unit
+    public Unit enemy;               // Reference to the enemy unit
+
+    [Header("Combat Visuals")]
+    public GameObject fireballPrefab;   // Projectile prefab for spells
+    public Transform playerFirePoint;  // Spawn point for projectiles
+
+    [Header("Battle State")]
+    private bool battleOver = false;   // Tracks if battle has ended
+    private bool playerTurn = true;    // Tracks whose turn it is
+
+    public float turnDelay = 1.0f;     // Delay before enemy turn
+
+    [Header("UI")]
+    public BattleLog battleLog;        // Displays battle messages
+    public SpellSlot[] spellSlots;    // Player spell UI slots
+
+    [Header("Audio")]
+    public AudioSource musicSource;   // Plays battle music
 
 
+    /// <summary>
+    /// Initializes battle data, enemy stats, UI, and gesture controls.
+    /// </summary>
     void Start()
     {
-       
+        // Validate required references
         if (GameData.currentLevel == null)
         {
             Debug.LogError("GameData.currentLevel is NULL!");
@@ -44,9 +65,10 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        
+        // Load level data
         LevelData data = GameData.currentLevel;
 
+        // Setup battle music
         if (data.battleMusic != null && musicSource != null)
         {
             musicSource.clip = data.battleMusic;
@@ -54,16 +76,20 @@ public class BattleManager : MonoBehaviour
             musicSource.Play();
         }
 
+        // Initialize enemy stats from level data
         Debug.Log("enemy = " + enemy);
         enemy.maxHP = data.enemyHP;
         enemy.currentHP = data.enemyHP;
         enemy.attack = data.enemyAttack;
         enemy.element = data.enemyType;
 
+        // Set enemy sprite
         enemy.GetComponent<SpriteRenderer>().sprite = data.enemySprite;
 
+        // Cache level index
         int index = GameData.currentLevelIndex;
 
+        // Initialize spell UI slots
         for (int i = 0; i < spellSlots.Length; i++)
         {
             Spell spell = player.GetSpell(i);
@@ -74,9 +100,11 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        // Restart gesture detection system
         var gesture = HandManager.Instance;
         gesture.webcamFeed.RestartWebcam();
 
+        // Listen for gesture inputs and map them to spells
         HandManager.onGestureComplete.AddListener((gesture) =>
         {
             if (!playerTurn || battleOver) return;
@@ -97,24 +125,28 @@ public class BattleManager : MonoBehaviour
             {
                 UseSpell(3);
             }
-            
-            
         });
     }
 
+    /// <summary>
+    /// Runs every frame. Currently unused for player input (gesture-based instead).
+    /// </summary>
     void Update()
     {
         if (battleOver) return;
 
         if (playerTurn)
         {
-            //HandlePlayerInput();
+            // Optional keyboard input for testing
+            // HandlePlayerInput();
         }
     }
 
+    /// <summary>
+    /// DEBUG ONLY: Allows keyboard input to simulate gestures.
+    /// </summary>
     void HandlePlayerInput()
     {
-        // TEMP: simulate gestures with keys
         if (Keyboard.current.digit1Key.wasPressedThisFrame)
         {
             UseSpell(0);
@@ -133,16 +165,22 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Executes a spell from a given slot index.
+    /// Handles cooldowns, damage calculation, and projectile spawning.
+    /// </summary>
     void UseSpell(int index)
     {
+        // Validate slot array
         if (spellSlots == null || index >= spellSlots.Length)
         {
             Debug.LogError("Invalid spellSlots!");
             return;
         }
+
         SpellSlot slot = spellSlots[index];
 
-        // Block if on cooldown
+        // Prevent use if spell is on cooldown
         if (!slot.IsReady())
         {
             battleLog.LogSystem("Spell is on cooldown!");
@@ -157,29 +195,38 @@ public class BattleManager : MonoBehaviour
 
         Spell spell = slot.GetSpell();
 
-         if (spell == null)
+        if (spell == null)
         {
             Debug.LogError("Spell is NULL in slot " + index);
             return;
         }
-        
-        // calculate elemental damage
+
+        // Calculate elemental damage multiplier
         float multiplier = ElementSystem.GetMultiplier(spell.element, enemy.element);
         int finalDamage = Mathf.RoundToInt(spell.damage * multiplier);
 
+        // Highlight selected spell slot
         HighlightSlot(index);
 
-        // Log updated damage
+        // Log player action
         battleLog.LogPlayer($"Player used {spell.spellName} ({finalDamage} dmg)");
 
-        // Pass modified damage
+        // Spawn projectile (NOTE: currently uses base damage, not modified)
         SpawnFireball(spell.damage);
 
+        // Start cooldown
         slot.TriggerCooldown();
 
+        // End player turn
         playerTurn = false;
     }
 
+    /// <summary>
+    /// Handles the enemy's turn:
+    /// - Deals damage to player
+    /// - Checks for player death
+    /// - Reduces spell cooldowns
+    /// </summary>
     public void EnemyTurn()
     {
         if (battleOver) return;
@@ -188,6 +235,7 @@ public class BattleManager : MonoBehaviour
 
         player.TakeDamage(enemy.attack);
 
+        // Check if player died
         if (player.IsDead())
         {
             battleLog.LogSystem("Player defeated!");
@@ -196,14 +244,19 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        // Reduce cooldowns at end of enemy turn
+        // Reduce cooldowns after enemy turn
         foreach (var slot in spellSlots)
         {
             slot.ReduceCooldown();
         }
+
+        // Return control to player
         playerTurn = true;
     }
 
+    /// <summary>
+    /// Spawns a fireball projectile targeting the enemy.
+    /// </summary>
     void SpawnFireball(int damage)
     {
         if (fireballPrefab == null || playerFirePoint == null)
@@ -211,6 +264,7 @@ public class BattleManager : MonoBehaviour
             Debug.LogError("Fireball prefab or fire point not assigned!");
             return;
         }
+
         GameObject fb = Instantiate(fireballPrefab, playerFirePoint.position, Quaternion.identity);
 
         Projectile proj = fb.GetComponent<Projectile>();
@@ -219,19 +273,27 @@ public class BattleManager : MonoBehaviour
         proj.battleManager = this;
     }
 
+    /// <summary>
+    /// Ends the battle and returns to level select.
+    /// </summary>
     public void EndBattle()
     {
         battleOver = true;
         StartCoroutine(ReturnToLevelSelect());
     }
 
+    /// <summary>
+    /// Waits for a delay, then triggers the enemy turn.
+    /// </summary>
     public IEnumerator DelayedEnemyTurn()
     {
         yield return new WaitForSeconds(turnDelay);
-
         EnemyTurn();
     }
 
+    /// <summary>
+    /// Highlights the currently selected spell slot.
+    /// </summary>
     public void HighlightSlot(int index)
     {
         for (int i = 0; i < spellSlots.Length; i++)
@@ -240,12 +302,17 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when the enemy is defeated.
+    /// Unlocks the next level and ends the battle.
+    /// </summary>
     public void OnEnemyDefeated()
     {
         if (battleOver) return;
 
         battleLog.LogSystem("Enemy defeated!");
 
+        // Unlock next level
         GameData.unlockedLevel = Mathf.Max(
             GameData.unlockedLevel,
             GameData.currentLevelIndex + 1
@@ -254,10 +321,12 @@ public class BattleManager : MonoBehaviour
         EndBattle();
     }
 
+    /// <summary>
+    /// Waits briefly, then loads the level select scene.
+    /// </summary>
     IEnumerator ReturnToLevelSelect()
     {
-        yield return new WaitForSeconds(2f); // gives time to read "Enemy defeated!"
-
+        yield return new WaitForSeconds(2f); // Allow time for message display
         SceneManager.LoadScene("LevelSelect");
     }
 }
